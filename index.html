@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preparazione Maturità 2026 - Prima Prova</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .content-section { display: none; }
+        .active { display: block; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+
+    <header class="bg-blue-700 text-white py-12 px-4 text-center shadow-lg">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Maturità 2026: Prima Prova</h1>
+        <p class="text-xl opacity-90">Corso intensivo di preparazione (30 ore)</p>
+    </header>
+
+    <nav class="flex flex-wrap justify-center gap-4 py-8 bg-white sticky top-0 shadow-sm z-10">
+        <button onclick="loadContent('info')" class="px-6 py-2 bg-blue-100 hover:bg-blue-600 hover:text-white rounded-full transition duration-300 font-semibold text-blue-700">Info</button>
+        <button onclick="loadContent('docente')" class="px-6 py-2 bg-blue-100 hover:bg-blue-600 hover:text-white rounded-full transition duration-300 font-semibold text-blue-700">Il Docente</button>
+        <button onclick="loadContent('metodo')" class="px-6 py-2 bg-blue-100 hover:bg-blue-600 hover:text-white rounded-full transition duration-300 font-semibold text-blue-700">Metodo</button>
+        <a href="https://forms.google.com/IL_TUO_LINK_QUI" target="_blank" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-full transition duration-300 font-semibold shadow-md">Iscrizioni</a>
+    </nav>
+
+    <main class="max-w-4xl mx-auto p-6 bg-white my-8 rounded-xl shadow-md min-h-[300px]">
+        
+        <div id="welcome" class="content-section active text-center py-10">
+            <h2 class="text-2xl font-semibold mb-4 text-blue-700">Benvenuto</h2>
+            <p>Seleziona una sezione sopra per scoprire i dettagli del corso di preparazione alla Maturità 2026.</p>
+        </div>
+
+        <div id="display-area" class="content-section leading-relaxed text-lg whitespace-pre-line">
+            </div>
+
+        <div id="loader" class="hidden text-center py-10">
+            <p class="animate-pulse text-gray-500">Caricamento contenuti...</p>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 text-slate-500 text-sm">
+        &copy; 2026 Corso Preparazione Maturità - GitHub Pages
+    </footer>
+
+    <script>
+        async function loadContent(section) {
+            const displayArea = document.getElementById('display-area');
+            const welcome = document.getElementById('welcome');
+            const loader = document.getElementById('loader');
+
+            // Nascondi benvenuto e mostra loader
+            welcome.classList.remove('active');
+            displayArea.classList.remove('active');
+            loader.classList.remove('hidden');
+
+            try {
+                // Esegue il fetch del file corrispondente (es. info.txt)
+                const response = await fetch(`${section}.txt`);
+                
+                if (!response.ok) throw new Error('File non trovato');
+                
+                const text = await response.text();
+                
+                // Inserisce il testo nell'area dedicata
+                displayArea.innerHTML = `
+                    <h2 class="text-3xl font-bold mb-6 text-blue-800 capitalize border-b-2 border-blue-100 pb-2">${section}</h2>
+                    <div class="prose max-w-none">${text}</div>
+                `;
+                
+                loader.classList.add('hidden');
+                displayArea.classList.add('active');
+            } catch (error) {
+                displayArea.innerHTML = `<p class="text-red-500 text-center">Errore nel caricamento del file ${section}.txt. Assicurati che il file esista nel repository.</p>`;
+                loader.classList.add('hidden');
+                displayArea.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
